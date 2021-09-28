@@ -13,7 +13,6 @@ CREATE TABLE `crm`.`unit` (
                                 `unit_id` INT NOT NULL AUTO_INCREMENT,
                                 `name` VARCHAR(45) NOT NULL,
                                 `description` VARCHAR(200) NULL,
-                                `user_id` INT NOT NULL,
                                 PRIMARY KEY (`unit_id`));
 
 ALTER TABLE `crm`.`user`
@@ -23,15 +22,5 @@ ALTER TABLE `crm`.`user`
     ADD CONSTRAINT `fk_user_to_unit`
         FOREIGN KEY (`unit_id`)
             REFERENCES `crm`.`unit` (`unit_id`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION;
-
-ALTER TABLE `crm`.`unit`
-    ADD INDEX `fk_unit_to_user_idx` (`user_id` ASC) VISIBLE;
-;
-ALTER TABLE `crm`.`unit`
-    ADD CONSTRAINT `fk_unit_to_user`
-        FOREIGN KEY (`user_id`)
-            REFERENCES `crm`.`user` (`user_id`)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION;

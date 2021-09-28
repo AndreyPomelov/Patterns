@@ -2,6 +2,7 @@ package com.example.crm.model.entity;
 
 import lombok.Data;
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Отдел (подразделение) компании
@@ -32,8 +33,9 @@ public class Unit {
     private String description;
 
     /**
-     * Идентификатор руководителя отдела
+     * Список сотрудников отдела
      */
-    @Column(name = "user_id")
-    private int chiefId;
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<User> users;
 }
