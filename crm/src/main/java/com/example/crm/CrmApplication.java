@@ -19,6 +19,7 @@ public class CrmApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CrmApplication.class, args);
 		test();
+		test1();
 	}
 
 	/**
@@ -34,6 +35,14 @@ public class CrmApplication {
 				.unitId(1)
 				.salary(1000)
 				.build();
+		System.out.println(user.toString());
+	}
+
+	/**
+	 * Тестовый метод для проверки паттерна "Интерпретатор"
+	 */
+	private static void test1() {
+		User user = User.create("leela leela123 Leela Turanga 1 2000");
 		System.out.println(user.toString());
 	}
 }
