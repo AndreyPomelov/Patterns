@@ -7,6 +7,9 @@ import com.example.crm.model.repository.UnitRepository;
 import com.example.crm.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * FACADE-сервис
@@ -14,6 +17,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CrmService implements FacadeRepository {
+
+    /**
+     * Локальное хранилище пользователей, служащее для
+     * сокращения количества обращений к базе данных
+     */
+    private final Map<Integer, User> userMap = new HashMap<>();
 
     /**
      * Экземпляр репозитория пользователей
@@ -32,8 +41,17 @@ public class CrmService implements FacadeRepository {
      * @return Экземпляр пользователя
      */
     @Override
+    @Transactional
     public User getUserById(int id) {
-        return userRepository.getById(id);
+        // Если пользователь существует в локальном хранилище,
+        // достаём его оттуда, иначе обращаемся к базе данных
+        if (userMap.containsKey(id)) {
+            return userMap.get(id);
+        } else {
+            User user = userRepository.getById(id);
+            userMap.put(id, user);
+            return user;
+        }
     }
 
     /**
@@ -54,6 +72,9 @@ public class CrmService implements FacadeRepository {
      */
     @Override
     public void saveUser(User user) {
+        // Сохраняем пользователя в локальном хранилище
+        // и в базе данных
+        userMap.put(user.getId(), user);
         userRepository.save(user);
     }
 

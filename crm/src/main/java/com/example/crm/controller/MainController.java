@@ -7,6 +7,7 @@ import com.example.crm.model.service.CrmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import javax.annotation.PostConstruct;
 
 /**
  * Главный контроллер
@@ -58,5 +59,27 @@ public class MainController {
         System.out.println(userFromDb.toString());
 
         return "index";
+    }
+
+    /**
+     * Тестовый метод для проверки паттерна "Identity Map"
+     */
+    @PostConstruct
+    private void testIdMap() {
+        User user1 = service.getUserById(1);
+        System.out.println(user1.toString());
+        // При повторном поиске пользователя с тем же ID,
+        // сервис должен достать пользователя из локального
+        // хранилища, а не из базы данных
+        User user2 = service.getUserById(1);
+        System.out.println(user2.toString());
+        User user3 = User.create("leela leela123 Leela Turanga 1 2000");
+        user3.setId(10);
+        service.saveUser(user3);
+        // После сохранения пользователя и обращения к нему же,
+        // сервис также должен достать пользователя из
+        // локального хранилища
+        User user4 = service.getUserById(10);
+        System.out.println(user4.toString());
     }
 }
